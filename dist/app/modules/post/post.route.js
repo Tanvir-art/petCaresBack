@@ -1,0 +1,21 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.postRoute = void 0;
+const express_1 = __importDefault(require("express"));
+const post_controller_1 = require("./post.controller");
+const auth_1 = __importDefault(require("../../middleware/auth"));
+const user_constant_1 = require("../user/user.constant");
+const valdateRequest_1 = __importDefault(require("../../middleware/valdateRequest"));
+const post_validation_1 = require("./post.validation");
+const router = express_1.default.Router();
+router.post("/create", (0, auth_1.default)(user_constant_1.USER_ROLE.admin, user_constant_1.USER_ROLE.user), (0, valdateRequest_1.default)(post_validation_1.postValidation.createPostSchema), post_controller_1.PostController.createPostController);
+router.get("/getAllPost", (0, auth_1.default)(user_constant_1.USER_ROLE.user, user_constant_1.USER_ROLE.admin), post_controller_1.PostController.getPosts);
+router.put("/publish/:id", (0, auth_1.default)(user_constant_1.USER_ROLE.admin), post_controller_1.PostController.publishPost);
+router.put("/unpublish/:id", (0, auth_1.default)(user_constant_1.USER_ROLE.admin), post_controller_1.PostController.unpublishPost);
+router.put("/upvote/:id", (0, auth_1.default)(user_constant_1.USER_ROLE.user), post_controller_1.PostController.upvotePost);
+router.put("/downvote/:id", (0, auth_1.default)(user_constant_1.USER_ROLE.user), post_controller_1.PostController.downvotePost);
+router.delete("/delete/:id", (0, auth_1.default)(user_constant_1.USER_ROLE.admin), post_controller_1.PostController.deletePost);
+exports.postRoute = router;
